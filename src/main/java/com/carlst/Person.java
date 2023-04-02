@@ -1,21 +1,25 @@
 package com.carlst;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Person {
     private String firstName;
     private String lastName;
-    private Map<Integer, Integer> cards = new HashMap<>();
+    private List<String> cards = new ArrayList<>();
 
-    public Person(String firstName, String lastName, int cardFirstSix, int cardLastFour) {
+    // Constructors
+
+    public Person(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        cards.put(cardFirstSix, cardLastFour);
+
+    }
+
+    public Person(String firstName, String lastName, int cardFirstSix, int cardLastFour) {
+        this(firstName, lastName);
+
+        cards.add("" + cardFirstSix + cardLastFour);
     }
 
     // Setters
@@ -28,10 +32,6 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public void setCard(int cardFirstSix, int cardLastFour) {
-        cards.put(cardFirstSix, cardLastFour);
-    }
-
     // Getters
 
     public String getFirstName() {
@@ -42,26 +42,25 @@ public class Person {
         return lastName;
     }
 
-    public Map<Integer, Integer> getCards() {
+    public List<String> getCards() {
         return cards;
     }
 
     // Andre metoder
 
-    public void removeCard(int cardFirstSix, int cardLastFour) {
-        if (!cards.containsKey(cardFirstSix) || cards.get(cardFirstSix) != cardLastFour) {
-            throw new IllegalArgumentException("Card does not exist");
-        }
-
-        cards.remove(cardFirstSix, cardLastFour);
+    public void addCard(int cardFirstSix, int cardLastFour) {
+        cards.add("" + cardFirstSix + cardLastFour);
     }
 
-    public static void main(String[] args) throws IOException {
-        Person edward = new Person("Edward", "Storlien", 123456, 7890);
-        edward.setCard(112233, 4455);
+    public void removeCard(int cardFirstSix, int cardLastFour) {
+        if (!cards.contains("" + cardFirstSix + cardLastFour)) {
+            throw new IllegalArgumentException("Person does not have this card");
+        }
 
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.writeValue(new File("src/main/resources/json/edward.json"), edward);
+        cards.remove("" + cardFirstSix + cardLastFour);
+    }
+
+    public static void main(String[] args) {
 
     }
 }
