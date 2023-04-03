@@ -7,14 +7,17 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PurchaseReader {
-    public static Map<String, Integer> getPurchases() {
+
+    public static Map<String, Double> getPurchases() {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        Map<String, Integer> purchases = new HashMap<>();
+        Map<String, Double> purchases = new HashMap<>();
         String cardNumber;
-        int amount;
+        double amount;
 
         try {
+
+            // Henter kjøpshistorikk gjennom API-et
             JsonNode rootNode = objectMapper.readTree(CallAPI.getResponseBody());
             JsonNode purchaseNode = rootNode.get("purchases");
 

@@ -25,7 +25,7 @@ public class CallAPI {
         }
 
         catch (Exception e) {
-            throw new IllegalStateException("Failed to get reponse from Zettle API.");
+            throw new IllegalStateException("Failed to get response from Zettle API.");
         }
 
         return response;

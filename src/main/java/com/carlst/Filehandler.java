@@ -10,7 +10,7 @@ import java.util.List;
 
 public class Filehandler {
 
-    public List<Person> readFile() {
+    public void readFile() {
         List<Person> objPersons = new ArrayList<>();
 
         try {
@@ -28,7 +28,7 @@ public class Filehandler {
                 
                 // Legger til summen
                 double amountSpent = Double.parseDouble(lineList[2]);
-                objPersons.get(index).depositAmount(amountSpent);
+                objPersons.get(index).setAmountSpent(amountSpent);
 
                 List<String> cardsList = new ArrayList<>(Arrays.asList(lineList));
                 cardsList = cardsList.subList(3, cardsList.size());
@@ -46,12 +46,16 @@ public class Filehandler {
 
             bf.close();
 
-            return objPersons;
+            Person.objPersons = objPersons;
         }
 
         catch (Exception e) {
-            throw new IllegalArgumentException("Could not find file or something lol");
+            throw new IllegalArgumentException("Failed to read file");
         }
+    }
+
+    public void saveFile() {
+        saveFile(Person.objPersons);
     }
 
     public void saveFile(List<Person> objPersons) {
@@ -81,14 +85,14 @@ public class Filehandler {
         }
 
         catch (Exception e) {
-            throw new IllegalArgumentException("Could not find file or something lol");
+            throw new IllegalArgumentException("Failed to write to file");
         }
     }
 
     public static void main(String[] args) {
         Filehandler fh = new Filehandler();
 
-        Person edward = new Person("Edward", "Storlien", 123456, 7890);
+        Person edward = new Person("Edward", "Storlien", 537217, 3332);
         edward.depositAmount(100.5);
         edward.addCard(696969, 6969);
         edward.addCard(989898, 4545);
@@ -99,7 +103,7 @@ public class Filehandler {
 
         Person fnedd = new Person("Fnedd", "Storlien", 123456, 7890);
         fnedd.depositAmount(69.69);
-        fnedd.addCard(666666, 6666);
+        fnedd.addCard(545478, 8966);
 
         Person louise = new Person("Louise", "Storlien");
 
@@ -112,7 +116,5 @@ public class Filehandler {
         fh.saveFile(personer);
 
         System.out.println("Ferdig med lagring av fil.");
-
-        fh.readFile();
     }
 }
