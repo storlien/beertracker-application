@@ -1,25 +1,25 @@
 package com.carlst;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 
 public class CallAPI {
-    // private static String queryURL =
-    // "https://finance.izettle.com/v2/accounts/LIQUID/transactions?start=2023-01-01T00:00:00.0%2B01:00&end=2023-03-01T00:00:00.0%2B01:00&includeTransactionType=PAYMENT&limit=1000&offset=0";
-    // private String queryURLpurchase =
-    // "https://purchase.izettle.com/purchases/v2?startDate=2023-01-01T00:00:00.0%2B01:00";
-    private static String queryURLpurchase = "https://purchase.izettle.com/purchases/v2?limit=50&descending=true";
 
     private static String bearerToken;
+    private static String queryURL = "https://purchase.izettle.com/purchases/v2?limit=1000"; // ha med &descending=true eller &startDate=2022-08-01
 
-    private static HttpResponse<String> getResponse() {
+    private static HttpResponse<String> getResponse(String queryURLending) {
         HttpResponse<String> response;
 
-        bearerToken = TokenGetter.retrieveGetToken(); // Denne må gjøres om på når TokenGetter bare skal stå og gå.
-                                                      // Altså i ferdig program.
+        bearerToken = TokenGetter.retrieveGetToken(); // Denne må gjøres om på når TokenGetter bare skal stå og gå. Altså i ferdig program.
 
         try {
-            response = Unirest.get(queryURLpurchase)
+            response = Unirest.get(queryURL + queryURLending)
                     .header("Authorization", "Bearer " + bearerToken)
                     .asString();
         }
@@ -32,15 +32,46 @@ public class CallAPI {
 
     }
 
-    public static String getResponseBody() {
-        return getResponse().getBody();
+    public static String getLastPurchaseHash(String jsonResponse) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String lastPurchaseHash = "";
+
+        try {
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+            lastPurchaseHash = rootNode.get("lastPurchaseHash").asText();
+        }
+
+        catch (Exception e) {
+
+        }
+
+        return lastPurchaseHash;
     }
 
-    public static int getResponseStatus() {
-        return getResponse().getStatus();
+    public static String getResponseBody(String queryURLending) {
+        return getResponse(queryURLending).getBody();
     }
+
+    // public static int getResponseStatus() {
+    //     return getResponseStatus("&descending=true");
+    // }
+
+    // public static int getResponseStatus(String lastPurchaseHash) {
+    //     return getResponse(lastPurchaseHash).getStatus();
+    // }
 
     public static void main(String[] args) {
-        System.out.println(getResponseBody());
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/resources/json/labambaAugust.json"));
+
+            bw.write(getResponseBody("&startDate=2022-08-01"));
+
+            bw.close();
+        }
+
+        catch (Exception e) {
+            
+        }
+
     }
 }

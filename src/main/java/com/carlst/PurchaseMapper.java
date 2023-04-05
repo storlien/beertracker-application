@@ -3,10 +3,12 @@ package com.carlst;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.collect.Multimap;
+
 public class PurchaseMapper {
     
     // Mapper kjøp og legger til summen på tidligere sum
-    public void mapPurchases(Map<String, Double> purchases) {
+    public static void mapPurchases(Multimap<String, Double> purchases) {
         Map<String, Person> cardHolders = getCardHolders();
 
         for (String cardNumberPurchase : purchases.keySet()) {
@@ -15,7 +17,11 @@ public class PurchaseMapper {
 
                 // Legger til summen på kortholders tidligere brukte sum dersom kortnumrene samsvarer
                 if (cardNumberPurchase.equals(cardNumberHolder)) {
-                    cardHolders.get(cardNumberHolder).depositAmount(purchases.get(cardNumberPurchase));
+
+                    // Summerer alle kjøp gjort med det kortet og legger til summen hos personen
+                    double amount = purchases.get(cardNumberPurchase).stream().reduce(0.0, (acc, b) -> acc + b);
+                    cardHolders.get(cardNumberHolder).depositAmount(amount);
+                    
                     break; // Et kort er kun mappet til én person. Hopper til neste kjøp
                 }
             }
@@ -23,7 +29,7 @@ public class PurchaseMapper {
     }
 
     // Lager HashMap med kortnummer mappet til Person-objekt
-    public Map<String, Person> getCardHolders() {
+    private static Map<String, Person> getCardHolders() {
         Map<String, Person> cardHolders = new HashMap<>();
 
         for (Person person : Person.objPersons) {
@@ -35,32 +41,12 @@ public class PurchaseMapper {
         return cardHolders;
     }
 
-    private void resetAmountSpent() {
+    // Setter alle personers sum til 0
+    public static void resetAmountSpent() {
         Person.objPersons.stream().forEach(p -> p.setAmountSpent(0));
     }
 
     public static void main(String[] args) {
-        PurchaseMapper mapper = new PurchaseMapper();
-        Filehandler fh = new Filehandler();
 
-        fh.readFile();
-        mapper.resetAmountSpent();
-
-        System.out.println("Kjøpshistorikk:");
-        Map<String, Double> purchaseList = PurchaseReader.getPurchases();
-        System.out.println(purchaseList);
-
-        System.out.println("Personer før");
-        System.out.println(Person.objPersons);
-
-        mapper.mapPurchases(purchaseList);
-
-        System.out.println("Personer etter");
-        System.out.println(Person.objPersons);
-
-        fh.saveFile();
-
-        // System.out.println("Reset amount spent:");
-        // mapper.resetAmountSpent();
     }
 }

@@ -19,10 +19,10 @@ public class Person {
 
     }
 
-    public Person(String firstName, String lastName, int cardFirstSix, int cardLastFour) {
+    public Person(String firstName, String lastName, String cardFirstSix, String cardLastFour) {
         this(firstName, lastName);
 
-        cards.add("" + cardFirstSix + cardLastFour);
+        cards.add(cardFirstSix + cardLastFour);
     }
 
     // Setters
@@ -67,7 +67,7 @@ public class Person {
         amountSpent -= amount;
     }
 
-    public void addCard(int cardFirstSix, int cardLastFour) {
+    public void addCard(String cardFirstSix, String cardLastFour) {
         cards.add("" + cardFirstSix + cardLastFour);
     }
 

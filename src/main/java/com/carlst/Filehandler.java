@@ -34,8 +34,8 @@ public class Filehandler {
                 cardsList = cardsList.subList(3, cardsList.size());
 
                 for (String card : cardsList) {
-                    int firstSix = Integer.parseInt(card.substring(0, 6));
-                    int lastFour = Integer.parseInt(card.substring(6));
+                    String firstSix = card.substring(0, 6);
+                    String lastFour = card.substring(6);
 
                     // Legger til kortet
                     objPersons.get(index).addCard(firstSix, lastFour);
@@ -92,18 +92,18 @@ public class Filehandler {
     public static void main(String[] args) {
         Filehandler fh = new Filehandler();
 
-        Person edward = new Person("Edward", "Storlien", 537217, 3332);
+        Person edward = new Person("Edward", "Storlien", "537217", "3332");
         edward.depositAmount(100.5);
-        edward.addCard(696969, 6969);
-        edward.addCard(989898, 4545);
+        edward.addCard("696969", "6969");
+        edward.addCard("989898", "4545");
 
-        Person mamma = new Person("Mamma", "Storlien", 123456, 7890);
+        Person mamma = new Person("Mamma", "Storlien", "123456", "7890");
         mamma.depositAmount(16.7);
-        mamma.addCard(990023, 9200);
+        mamma.addCard("990023", "9200");
 
-        Person fnedd = new Person("Fnedd", "Storlien", 123456, 7890);
+        Person fnedd = new Person("Fnedd", "Storlien", "123456", "7890");
         fnedd.depositAmount(69.69);
-        fnedd.addCard(545478, 8966);
+        fnedd.addCard("545478", "8966");
 
         Person louise = new Person("Louise", "Storlien");
 
