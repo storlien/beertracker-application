@@ -7,7 +7,11 @@ import com.google.common.collect.Multimap;
 
 public class PurchaseMapper {
     
-    // Mapper kjøp og legger til summen på tidligere sum
+    /**
+     * Mapper kjøp og legger til summen på tidligere sum til Person-objektet
+     * 
+     * @param purchases Multimap med kortnummer mappet til liste av summer brukt på det kortnummeret
+     */
     public static void mapPurchases(Multimap<String, Double> purchases) {
         Map<String, Person> cardHolders = getCardHolders();
 
@@ -20,7 +24,7 @@ public class PurchaseMapper {
 
                     // Summerer alle kjøp gjort med det kortet og legger til summen hos personen
                     double amount = purchases.get(cardNumberPurchase).stream().reduce(0.0, (acc, b) -> acc + b);
-                    cardHolders.get(cardNumberHolder).depositAmount(amount);
+                    cardHolders.get(cardNumberHolder).addAmount(amount);
                     
                     break; // Et kort er kun mappet til én person. Hopper til neste kjøp
                 }
@@ -28,11 +32,15 @@ public class PurchaseMapper {
         }
     }
 
-    // Lager HashMap med kortnummer mappet til Person-objekt
+    /**
+     * Lager HashMap med kortnummer mappet til Person-objekt. Henter Person-objekter fra Person.objPersons
+     * 
+     * @return HashMap med kortnummer mappet til Person-objekt
+     */
     private static Map<String, Person> getCardHolders() {
         Map<String, Person> cardHolders = new HashMap<>();
 
-        for (Person person : Person.objPersons) {
+        for (Person person : Person.getObjPersons()) {
             for (String card : person.getCards()) {
                 cardHolders.put(card, person);
             }
@@ -41,9 +49,11 @@ public class PurchaseMapper {
         return cardHolders;
     }
 
-    // Setter alle personers sum til 0
+    /**
+     * Setter alle personers sum til 0
+     */
     public static void resetAmountSpent() {
-        Person.objPersons.stream().forEach(p -> p.setAmountSpent(0));
+        Person.getObjPersons().stream().forEach(p -> p.setAmountSpent(0));
     }
 
     public static void main(String[] args) {

@@ -7,17 +7,30 @@ import com.google.common.collect.Multimap;
 
 public class PurchaseReader {
 
-    // Henter alle kjøp fra og med en dato
+    private static String lastPurchaseHash;
+
+    /**
+     * Henter alle kjøp fra og med en dato og returnerer Multimap
+     * 
+     * @param date Dato i formatet "YYYY-MM-DD".
+     * @return Multimap med kortnummer som key og liste med summer som value.
+     */
     public static Multimap<String, Double> getPurchasesFromDate(String date) {
         String jsonString = CallAPI.getResponseBody("&startDate=" + date);
 
         return getNewerPurchases(jsonString);
     }
 
-    // Henter alle nyere kjøp fra og med det eldste kjøpet på en spørring
+    /**
+     * Henter alle nyere kjøp fra og med det eldste kjøpet på en spørring (JSON string)
+     * 
+     * @param jsonString JSON string. Henter alle nye kjøp fra og med den eldste på denne strengen.
+     * @return Multimap med kortnummer som key og liste med summer som value.
+     */
     public static Multimap<String, Double> getNewerPurchases(String jsonString) {
         Multimap<String, Double> purchases = ArrayListMultimap.create();
         ObjectMapper objectMapper = new ObjectMapper();
+        String lastPurchaseHash;
 
         try {
             // Så lenge det er flere kjøp å lese av
@@ -25,21 +38,35 @@ public class PurchaseReader {
                 purchases.putAll(getPurchases(jsonString));
 
                 // Henter de 1000 neste transaksjonene
-                jsonString = CallAPI.getResponseBody("&lastPurchaseHash=" + CallAPI.getLastPurchaseHash(jsonString));
+                lastPurchaseHash = CallAPI.getLastPurchaseHash(jsonString);
+                jsonString = getJsonStringLastHash(lastPurchaseHash);
+                setLastPurchaseHash(lastPurchaseHash);
             }
         }
 
         catch (Exception e) {
-
+            
         }
             
         return purchases;
     }
 
-    public static Multimap<String, Double> getPurchasesQuery(String queryURLending) {
-        return getPurchases(CallAPI.getResponseBody(queryURLending));
+    /**
+     * Henter de neste (opp til) 1000 transaksjoner etter lastPurchaseHash.
+     * 
+     * @param lastPurchaseHash Nyere transaksjoner etter denne lastPurchaseHash
+     * @return JSON string med transaksjoner etter lastPurchaseHash
+     */
+    public static String getJsonStringLastHash(String lastPurchaseHash) {
+        return CallAPI.getResponseBody("&lastPurchaseHash=" + lastPurchaseHash);
     }
 
+    /**
+     * Leser JSON-streng og returnerer Multimap med kortnummer mappet til liste med summer brukt på det kortnummeret i den JSON-strengen.
+     * 
+     * @param jsonString JSON-streng med transaksjoner
+     * @return Multimap med kortnummer mappet til liste med summer brukt på det kortnummeret
+     */
     public static Multimap<String, Double> getPurchases(String jsonString) {
     
         ObjectMapper objectMapper = new ObjectMapper();
@@ -80,9 +107,31 @@ public class PurchaseReader {
         return purchases;
     }
 
+    // Setters
+
+    /**
+     * Setter ny lastPurchaseHash
+     * 
+     * @param lastPurchaseHash Ny lastPurchaseHash
+     */
+    public static void setLastPurchaseHash(String lastPurchaseHash) {
+        PurchaseReader.lastPurchaseHash = lastPurchaseHash;
+    }
+
+    // Getters
+
+    /**
+     * Returnerer lastPurchaseHash
+     * 
+     * @return lastPurchaseHash
+     */
+    public static String getLastPurchaseHash() {
+        return lastPurchaseHash;
+    }
+
     public static void main(String[] args) {
         // System.out.println(getPurchasesFromDate("2022-08-01"));
-        System.out.println(getPurchasesFromDate("2022-08-01").size());
+        // System.out.println(getPurchasesFromDate("2022-08-01").size());
         // System.out.println(getPurchasesFromDate("2022-08-01").keySet().size());
     }
 }
