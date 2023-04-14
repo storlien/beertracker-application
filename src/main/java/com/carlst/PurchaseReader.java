@@ -21,13 +21,19 @@ public class PurchaseReader {
         return getNewerPurchases(jsonString);
     }
 
+
     /**
-     * Henter alle nyere kjøp fra og med det eldste kjøpet på en spørring (JSON string)
+     * Henter alle nyere kjøp fra og med det eldste kjøpet på en spørring (JSON string).
+     * Fortsetter å hente til det ikke finnes flere nye kjøp.
+     * Hvis det ikke var flere nye kjøp fra starten av metodekallet, returneres en tom Multimap.
+     * Synchronized metode for at metoden ikke skal kunne kjøres flere av i parallell.
+     * Det kan bli tull med variabelen PurchaseReader.lastPurchaseHash dersom metoden kjøres flere ganger samtidig.
      * 
      * @param jsonString JSON string. Henter alle nye kjøp fra og med den eldste på denne strengen.
      * @return Multimap med kortnummer som key og liste med summer som value.
      */
-    public static Multimap<String, Double> getNewerPurchases(String jsonString) {
+    public static synchronized Multimap<String, Double> getNewerPurchases(String jsonString) {
+
         Multimap<String, Double> purchases = ArrayListMultimap.create();
         ObjectMapper objectMapper = new ObjectMapper();
         String lastPurchaseHash;
@@ -38,28 +44,31 @@ public class PurchaseReader {
                 purchases.putAll(getPurchases(jsonString));
 
                 // Henter de 1000 neste transaksjonene
-                lastPurchaseHash = CallAPI.getLastPurchaseHash(jsonString);
+                lastPurchaseHash = readLastPurchaseHash(jsonString);
                 jsonString = getJsonStringLastHash(lastPurchaseHash);
                 setLastPurchaseHash(lastPurchaseHash);
             }
         }
 
         catch (Exception e) {
-            
+            throw new IllegalStateException("Failed to get newer purchases");
         }
-            
+
         return purchases;
     }
 
+
     /**
-     * Henter de neste (opp til) 1000 transaksjoner etter lastPurchaseHash.
+     * Returnerer de neste (opp til) 1000 transaksjoner etter (ikke inkludert) lastPurchaseHash.
+     * Dersom det ikke finnes nyere transaksjoner etter lastPurchaseHash, blir "purchases"-listen i JSON-strengen tom.
      * 
      * @param lastPurchaseHash Nyere transaksjoner etter denne lastPurchaseHash
-     * @return JSON string med transaksjoner etter lastPurchaseHash
+     * @return JSON-streng med transaksjoner etter (ikke inkludert) lastPurchaseHash
      */
     public static String getJsonStringLastHash(String lastPurchaseHash) {
         return CallAPI.getResponseBody("&lastPurchaseHash=" + lastPurchaseHash);
     }
+
 
     /**
      * Leser JSON-streng og returnerer Multimap med kortnummer mappet til liste med summer brukt på det kortnummeret i den JSON-strengen.
@@ -101,11 +110,12 @@ public class PurchaseReader {
         }
 
         catch (Exception e) {
-            throw new IllegalStateException("Failed to read JSON string: " + e);
+            throw new IllegalArgumentException("Failed to read purchases from JSON string");
         }
 
         return purchases;
     }
+
 
     // Setters
 
@@ -118,10 +128,11 @@ public class PurchaseReader {
         PurchaseReader.lastPurchaseHash = lastPurchaseHash;
     }
 
+
     // Getters
 
     /**
-     * Returnerer lastPurchaseHash
+     * Returnerer lastPurchaseHash fra PurchaseReader.lastPurchaseHash
      * 
      * @return lastPurchaseHash
      */
@@ -129,9 +140,26 @@ public class PurchaseReader {
         return lastPurchaseHash;
     }
 
-    public static void main(String[] args) {
-        // System.out.println(getPurchasesFromDate("2022-08-01"));
-        // System.out.println(getPurchasesFromDate("2022-08-01").size());
-        // System.out.println(getPurchasesFromDate("2022-08-01").keySet().size());
+
+    /**
+     * Returnerer lastPurchaseHash fra en JSON-streng med transaksjoner.
+     * 
+     * @param jsonResponse JSON-strengen med transaksjoner
+     * @return lastPurchaseHash fra JSON-strengen
+     */
+    public static String readLastPurchaseHash(String jsonResponse) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String lastPurchaseHash = "";
+
+        try {
+            JsonNode rootNode = objectMapper.readTree(jsonResponse);
+            lastPurchaseHash = rootNode.get("lastPurchaseHash").asText();
+        }
+
+        catch (Exception e) {
+            throw new IllegalArgumentException("Failed to read lastPurchaseHash from JSON string");
+        }
+
+        return lastPurchaseHash;
     }
 }

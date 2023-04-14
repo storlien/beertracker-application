@@ -13,6 +13,7 @@ public class PurchaseMapper {
      * @param purchases Multimap med kortnummer mappet til liste av summer brukt på det kortnummeret
      */
     public static void mapPurchases(Multimap<String, Double> purchases) {
+
         Map<String, Person> cardHolders = getCardHolders();
 
         for (String cardNumberPurchase : purchases.keySet()) {
@@ -54,9 +55,5 @@ public class PurchaseMapper {
      */
     public static void resetAmountSpent() {
         Person.getObjPersons().stream().forEach(p -> p.setAmountSpent(0));
-    }
-
-    public static void main(String[] args) {
-
     }
 }

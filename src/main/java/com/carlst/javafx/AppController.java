@@ -12,7 +12,10 @@ import com.carlst.Person;
 import com.carlst.PurchaseMapper;
 import com.carlst.PurchaseReader;
 import com.carlst.TokenGetter;
+import com.google.common.collect.Multimap;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
@@ -20,12 +23,18 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.util.Duration;
 
 public class AppController {
 
     private TokenGetter tokenGetter;
     private Timer timer;
     private TimerTask task;
+
+    private Paint green = new Color(0, 0.6, 0, 1.0);
+    private Paint red = new Color(1.0, 0.2, 0.2, 1.0);
     
     @FXML private Pane container1, container2;
     @FXML private TextField firstName, lastName, cardNewFirst6, cardNewLast4, cardAddFirst6, cardAddLast4, cardRemoveFirst6, cardRemoveLast4, dateUpdate;
@@ -42,7 +51,7 @@ public class AppController {
         // Lager instans av TokenGetter som sørger for at access token er gyldig til enhver tid
         tokenGetter = new TokenGetter();
 
-        // Leser fil og dermed lager liste med Person-objekter på Person.objPersons
+        // Leser filer og lager liste med Person-objekter på Person.objPersons og laster lastPurchaseHash til PurchaseReader.lastPurchaseHash
         Filehandler.readFile();
         Filehandler.readHashFile();
 
@@ -50,13 +59,18 @@ public class AppController {
         task = new TimerTask() {
             @Override
             public void run() {
-                PurchaseMapper.mapPurchases(PurchaseReader.getNewerPurchases(PurchaseReader.getJsonStringLastHash(PurchaseReader.getLastPurchaseHash())));
-                updateGUI();
+                Multimap<String, Double> newPurchases = PurchaseReader.getNewerPurchases(PurchaseReader.getJsonStringLastHash(PurchaseReader.getLastPurchaseHash()));
+
+                if (!newPurchases.isEmpty()) {
+                    PurchaseMapper.mapPurchases(newPurchases);
+                    updateGUI();
+                }
+
             }
             
         };
 
-        timer.schedule(task, 5 * 1000, 5 * 1000); // Delay: 10 sek, Period: 5 sek
+        timer.schedule(task, 10 * 1000, 5 * 1000); // Delay: 10 sek, Period: 5 sek
 
         updateGUI();
     }
@@ -82,7 +96,7 @@ public class AppController {
         }
 
         else {
-            updateStatus("Velg en person");
+            updateStatus("Velg en person først", red, true);
         }
     }
 
@@ -95,7 +109,7 @@ public class AppController {
         }
 
         else {
-            updateStatus("Velg en person");
+            updateStatus("Velg en person først", red, true);
         }
     }
 
@@ -113,7 +127,7 @@ public class AppController {
     @FXML
     public void onRemovePerson() {
         Person.getObjPersons().remove(listPersonsSettings.getSelectionModel().getSelectedIndex());
-        updateStatus("Person fjernet");
+        updateStatus("Person fjernet", red, true);
         updateGUI();
     }
 
@@ -135,10 +149,14 @@ public class AppController {
         task.cancel();
     }
 
-    // Tilbakestiller summene og mapper kjøpshistorikk på nytt
+    /**
+     * Tilbakestiller summene og mapper kjøpshistorikk på nytt
+     * 
+     * @param date Tidligste dato for kjøp som skal hentes
+     */
     public void mapNewPurchases(String date) {
 
-        updateStatus("Oppdaterer kjøpshistorikk...");
+        updateStatus("Oppdaterer kjøpshistorikk...", red, false);
 
         Task<Void> task = new Task<>() {
             @Override
@@ -151,14 +169,34 @@ public class AppController {
         };
 
         task.setOnSucceeded(e -> {
-            updateStatus("Ferdig!");
+            updateStatus("Ferdig!", green, true);
         });
 
         new Thread(task).start();
     }
 
-    private void updateStatus(String status) {
-        labelStatus.setText(status);
+    private void updateStatus(String status, Paint color, boolean changeBack) {
+
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+
+                labelStatus.setTextFill(color);
+                labelStatus.setText(status);
+
+                if (!changeBack) {
+                    return;
+                }
+
+                Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+                    labelStatus.setTextFill(green);
+                    labelStatus.setText("OK");
+                }));
+
+                timeline.setCycleCount(1);
+                timeline.play();
+            }});
     }
 
     private void updateGUI() {

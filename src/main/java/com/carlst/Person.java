@@ -137,8 +137,4 @@ public class Person implements Comparable<Person> {
     public String toString() {
         return firstName + " " + lastName + ": " + (int) amountSpent + " kr " + cards;
     }
-
-    public static void main(String[] args) {
-
-    }
 }
