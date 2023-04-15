@@ -2,6 +2,8 @@ package com.carlst;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class Person implements Comparable<Person> {
     private static List<Person> objPersons = new ArrayList<>();
@@ -14,7 +16,9 @@ public class Person implements Comparable<Person> {
     // Constructors
 
     public Person(String firstName, String lastName) {
-        validateName(firstName, lastName);
+        if (!validateName(firstName, lastName)) {
+            throw new IllegalArgumentException("Invalid name");
+        }
 
         this.firstName = firstName;
         this.lastName = lastName;
@@ -22,7 +26,16 @@ public class Person implements Comparable<Person> {
     }
 
     public Person(String firstName, String lastName, String cardFirstSix, String cardLastFour) {
-        this(firstName, lastName);
+        if (!validateName(firstName, lastName)) {
+            throw new IllegalArgumentException("Invalid name");
+        }
+
+        else if (!validateCard(cardFirstSix, cardLastFour)) {
+            throw new IllegalArgumentException("Invalid card");
+        }
+
+        this.firstName = firstName;
+        this.lastName = lastName;
 
         cards.add(cardFirstSix + cardLastFour);
     }
@@ -30,7 +43,9 @@ public class Person implements Comparable<Person> {
     // Setters
 
     public void setAmountSpent(double amountSpent) {
-        validateAmount(amountSpent);
+        if (!validateAmount(amountSpent)) {
+            throw new IllegalArgumentException("Amount cannot be below zero");
+        }
 
         this.amountSpent = amountSpent;
     }
@@ -63,17 +78,72 @@ public class Person implements Comparable<Person> {
 
     // Validators
 
-    public void validateName(String firstName, String lastName) {
-        // for (String name : objPersons.stream().map(p -> p.getFirstName()).collect(Collectors.toList())) {
-            
-        // }
+    /**
+     * Validerer om et navn er gyldig. Sjekker også om navnet er registrert fra før.
+     * 
+     * @param firstName
+     * @param lastName
+     * @return
+     */
+    public boolean validateName(String firstName, String lastName) {
+
+        Pattern patt = Pattern.compile("\\p{L}+( \\p{L}+)*");
+
+        if (!patt.matcher(firstName).matches() || !patt.matcher(lastName).matches()) {
+            return false;
+        }
+
+        List<String> fNames = objPersons.stream().map(p -> p.getFirstName()).collect(Collectors.toList());
+        List<String> lNames = objPersons.stream().map(p -> p.getLastName()).collect(Collectors.toList());
+
+        for (int i = 0 ; i < fNames.size() ; i++) {
+            if (firstName.equals(fNames.get(i)) && lastName.equals(lNames.get(i))) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    public void validateAmount(double amount) {
+    /**
+     * Validerer om kjøpesummen er gyldig.
+     * 
+     * @param amount Kjøpesum
+     * @return True dersom kjøpesummen er gyldig, false ellers
+     */
+    public boolean validateAmount(double amount) {
 
+        if (amount < 0) {
+            return false;
+        }
+
+        return true;
     }
 
-    public void validateCard(String cardFirstSix, String cardLastFour) {
+    /**
+     * Validerer om et kort er gyldig. Sjekker også om kortet er lagt inn fra før, uansett person.
+     * 
+     * @param cardFirstSix Første seks siffer av kortnummeret
+     * @param cardLastFour Siste fire siffer av kortnummeret
+     * @return True dersom kortet er gyldig, false ellers
+     */
+    public boolean validateCard(String cardFirstSix, String cardLastFour) {
+
+        if (!Pattern.compile("\\d{6}").matcher(cardFirstSix).matches() || !Pattern.compile("\\d{4}").matcher(cardLastFour).matches()) {
+            return false;
+        }
+
+        String newCard = cardFirstSix + cardLastFour;
+
+        for (Person person : objPersons) {
+            for (String card : person.getCards()) {
+                if (card.equals(newCard)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
 
     }
 
@@ -85,7 +155,9 @@ public class Person implements Comparable<Person> {
      * @param amount Sum å legge til tidligere sum brukt
      */
     public void addAmount(double amount) {
-        validateAmount(amount);
+        if (!validateAmount(amount)) {
+            throw new IllegalArgumentException("Amount cannot be below zero");
+        }
 
         amountSpent += amount;
     }
@@ -97,7 +169,9 @@ public class Person implements Comparable<Person> {
      * @param cardLastFour Siste fire siffer av kortnummeret
      */
     public void addCard(String cardFirstSix, String cardLastFour) {
-        validateCard(cardFirstSix, cardLastFour);
+        if (!validateCard(cardFirstSix, cardLastFour)) {
+            throw new IllegalArgumentException("Invalid card");
+        }
 
         cards.add(cardFirstSix + cardLastFour);
     }
@@ -109,9 +183,11 @@ public class Person implements Comparable<Person> {
      * @param cardLastFour Siste fire siffer av kortnummeret
      */
     public void removeCard(String cardFirstSix, String cardLastFour) {
-        validateCard(cardFirstSix, cardLastFour);
+        if (!Pattern.compile("\\d{6}").matcher(cardFirstSix).matches() || !Pattern.compile("\\d{4}").matcher(cardLastFour).matches()) {
+            throw new IllegalArgumentException("Invalid card number");
+        }
 
-        if (!cards.contains(cardFirstSix + cardLastFour)) {
+        else if (!cards.contains(cardFirstSix + cardLastFour)) {
             throw new IllegalArgumentException("Person does not have this card");
         }
 
@@ -136,5 +212,18 @@ public class Person implements Comparable<Person> {
     @Override
     public String toString() {
         return firstName + " " + lastName + ": " + (int) amountSpent + " kr " + cards;
+    }
+
+    public static void main(String[] args) {
+
+        objPersons.add(new Person("Carl æøåÆØÅ Edward", "Storlien", "121212", "1212"));
+        objPersons.add(new Person("Paul Andre Johanson Storlien Pappa", "Johanson", "131313", "1313"));
+        objPersons.add(new Person("Annika", "Johansen", "131313", "1311"));
+
+        // newObjPersons.add(new Person("Merete", "Storlien"));
+
+        System.out.println(getObjPersons());
+
+        // System.out.println("Valid? " + objPersons.get(0).validateCard("141414", "1414"));
     }
 }

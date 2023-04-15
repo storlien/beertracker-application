@@ -53,7 +53,7 @@ public class Filehandler {
         }
 
         catch (Exception e) {
-            throw new IllegalStateException("Failed to read persons file");
+            throw new IllegalStateException("Failed to read persons file: " + e);
         }
     }
 

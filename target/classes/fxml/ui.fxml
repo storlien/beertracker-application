@@ -102,27 +102,32 @@
                      </font>
                   </Label>
                   <Label layoutX="24.0" layoutY="135.0" text="Første 6 siffer" />
-                  <Label layoutX="19.0" layoutY="169.0" text="Siste 4 siffer" />
+                  <Label layoutX="24.0" layoutY="169.0" text="Siste 4 siffer" />
                   <TextField fx:id="firstName" layoutX="138.0" layoutY="45.0" />
                   <TextField fx:id="lastName" layoutX="138.0" layoutY="79.0" />
                   <TextField fx:id="cardNewFirst6" layoutX="138.0" layoutY="131.0" />
                   <TextField fx:id="cardNewLast4" layoutX="138.0" layoutY="165.0" />
-                  <Button layoutX="19.0" layoutY="201.0" mnemonicParsing="false" onAction="#onAddPerson" text="Legg til person" />
-                  <Label layoutX="25.0" layoutY="238.0" text="Legg til kort på valgt person">
+                  <Button layoutX="24.0" layoutY="201.0" mnemonicParsing="false" onAction="#onAddPerson" text="Legg til person" />
+                  <Label layoutX="24.0" layoutY="238.0" text="Legg til kort på valgt person">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="cardAddFirst6" layoutX="152.0" layoutY="283.0" />
-                  <TextField fx:id="cardAddLast4" layoutX="152.0" layoutY="315.0" />
+                  <TextField fx:id="cardAddFirst6" layoutX="138.0" layoutY="283.0" />
+                  <TextField fx:id="cardAddLast4" layoutX="138.0" layoutY="315.0" />
                   <Label layoutX="177.0" layoutY="267.0" text="Kortnummer">
                      <font>
                         <Font name="System Bold" size="13.0" />
                      </font>
                   </Label>
-                  <Label layoutX="28.0" layoutY="319.0" text="Siste 4 siffer" />
+                  <Label layoutX="24.0" layoutY="319.0" text="Siste 4 siffer" />
                   <Label layoutX="24.0" layoutY="287.0" text="Første 6 siffer" />
-                  <Button layoutX="20.0" layoutY="350.0" mnemonicParsing="false" onAction="#onAddCard" text="Legg til kort" />
+                  <Button layoutX="24.0" layoutY="350.0" mnemonicParsing="false" onAction="#onAddCard" text="Legg til kort" />
+                  <Label fx:id="statusError" alignment="CENTER" layoutX="24.0" layoutY="488.0" prefHeight="47.0" prefWidth="401.0" textFill="#d70707">
+                     <font>
+                        <Font name="System Bold" size="13.0" />
+                     </font>
+                  </Label>
                </children>
             </Pane>
             <Pane layoutX="521.0" layoutY="323.0" prefHeight="314.0" prefWidth="421.0" style="-fx-background-color: #a9a9a9;">

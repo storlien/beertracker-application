@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.carlst.Filehandler;
@@ -38,7 +39,7 @@ public class AppController {
     
     @FXML private Pane container1, container2;
     @FXML private TextField firstName, lastName, cardNewFirst6, cardNewLast4, cardAddFirst6, cardAddLast4, cardRemoveFirst6, cardRemoveLast4, dateUpdate;
-    @FXML private Label labelStatus, firstFullName, secondFirstName, secondLastName, thirdFirstName, thirdLastName, firstSum, secondSum, thirdSum;
+    @FXML private Label labelStatus, statusError, firstFullName, secondFirstName, secondLastName, thirdFirstName, thirdLastName, firstSum, secondSum, thirdSum;
     @FXML private ListView<Person> listPersonsSettings;
     @FXML private ListView<String> listLeaderboard, listLosers;
 
@@ -82,21 +83,34 @@ public class AppController {
         String cardNewFirst6 = this.cardNewFirst6.getText();
         String cardNewLast4 = this.cardNewLast4.getText();
 
-        Person.getObjPersons().add(new Person(firstName, lastName, cardNewFirst6, cardNewLast4));
+        try {
+            Person.getObjPersons().add(new Person(firstName, lastName, cardNewFirst6, cardNewLast4));
+        }
+
+        catch (Exception e) {
+            updateErrorStatus(e.getMessage());
+            return;
+        }
 
         mapNewPurchases("2022-08-01");
-    }
+
+    }          
 
     @FXML
     public void onAddCard() {
         Person person = listPersonsSettings.getSelectionModel().getSelectedItem();
         
-        if (person != null) {
+        if (person == null) {
+            updateErrorStatus("Velg en person først");
+            return;
+        }
+
+        try {
             person.addCard(this.cardAddFirst6.getText(), this.cardAddLast4.getText());
         }
 
-        else {
-            updateStatus("Velg en person først", red, true);
+        catch (Exception e) {
+            updateErrorStatus(e.getMessage());
         }
     }
 
@@ -104,13 +118,33 @@ public class AppController {
     public void onRemoveCard() {
         Person person = listPersonsSettings.getSelectionModel().getSelectedItem();
         
-        if (person != null) {
+        if (person == null) {
+            updateErrorStatus("Velg en person først");
+            return;
+        }
+
+        try {
             person.removeCard(cardRemoveFirst6.getText(), cardRemoveLast4.getText());
         }
 
-        else {
-            updateStatus("Velg en person først", red, true);
+        catch (Exception e) {
+            updateErrorStatus(e.getMessage());
         }
+    }
+
+    @FXML
+    public void onRemovePerson() {
+        Person person = listPersonsSettings.getSelectionModel().getSelectedItem();
+
+        if (person == null) {
+            updateErrorStatus("Velg en person først");
+            return;
+        }
+
+        Person.getObjPersons().remove(person);
+        
+        updateStatus("Person fjernet", red, true);
+        updateGUI();
     }
 
     @FXML
@@ -120,15 +154,7 @@ public class AppController {
 
     @FXML
     public void onUpdatePersonsDate() {
-        String date = dateUpdate.getText();
-        mapNewPurchases(date);
-    }
-
-    @FXML
-    public void onRemovePerson() {
-        Person.getObjPersons().remove(listPersonsSettings.getSelectionModel().getSelectedIndex());
-        updateStatus("Person fjernet", red, true);
-        updateGUI();
+        mapNewPurchases(dateUpdate.getText());
     }
 
     @FXML
@@ -155,6 +181,12 @@ public class AppController {
      * @param date Tidligste dato for kjøp som skal hentes
      */
     public void mapNewPurchases(String date) {
+
+        // Sjekker om dato er på gyldig format, men ikke nødvendigvis en gyldig dato
+        if (!Pattern.compile("\\d{4}-\\d{2}-\\d{2}").matcher(date).matches()) {
+            updateErrorStatus("Ikke gyldig format på dato");
+            return;
+        }
 
         updateStatus("Oppdaterer kjøpshistorikk...", red, false);
 
@@ -192,6 +224,24 @@ public class AppController {
                 Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
                     labelStatus.setTextFill(green);
                     labelStatus.setText("OK");
+                }));
+
+                timeline.setCycleCount(1);
+                timeline.play();
+            }});
+    }
+
+    private void updateErrorStatus(String error) {
+
+        Platform.runLater(new Runnable() {
+
+            @Override
+            public void run() {
+
+                statusError.setText(error);
+
+                Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(5), event -> {
+                    statusError.setText("");
                 }));
 
                 timeline.setCycleCount(1);
@@ -247,5 +297,4 @@ public class AppController {
 
         });
     }
-
 }
