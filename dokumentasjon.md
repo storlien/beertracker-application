@@ -42,3 +42,8 @@ Noe logikk blir likevel utført i Controller-klassen. Dette er kode som med ford
 
 ### 4. Hvordan har dere gått frem når dere skulle teste appen deres, og hvorfor har dere valgt de testene dere har? Har dere testet alle deler av koden? Hvis ikke, hvordan har dere prioritert hvilke deler som testes og ikke?
 
+Jeg har ikke testet alle deler av koden, nei.
+
+Jeg har valgt å teste lesing av persons.txt- og lastPurchaseHash.txt-filen. Jeg ønsker ikke å teste lagring til disse filene, ettersom det kan potensielt tukle med personer som er registrert. Det er ikke noe jeg ønsker å risikere.
+
+Jeg har valgt å teste valideringsmetodene i Person-klassen. Dette er de eneste metodene i applikasjonen som validerer data, ettersom dette er eneste input som brukere kan komme med. Jeg antar derfor at data fra Zettle API-et er gyldig, men jeg ville ha lagt inn mer feilhåndtering i denne delen av koden dersom jeg hadde hatt mer tid.

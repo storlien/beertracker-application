@@ -111,7 +111,10 @@ public class AppController {
 
         catch (Exception e) {
             updateErrorStatus(e.getMessage());
+            return;
         }
+
+        mapNewPurchases("2022-08-01");
     }
 
     @FXML
@@ -129,7 +132,10 @@ public class AppController {
 
         catch (Exception e) {
             updateErrorStatus(e.getMessage());
+            return;
         }
+
+        mapNewPurchases("2022-08-01");
     }
 
     @FXML
@@ -282,12 +288,12 @@ public class AppController {
 
                 // Lager liste med hvilken plass på leaderboardet i forkant av Person-objektet
                 listPersonsRankedString = listPersonsRanked.stream()
-                                                            .map(p -> listPersonsRanked.indexOf(p) + 4 + ". " + p.getFirstName() + " " + p.getLastName() + ": " + p.getAmountSpent())
+                                                            .map(p -> listPersonsRanked.indexOf(p) + 4 + ". " + p.getFirstName() + " " + p.getLastName() + ": " + (int) p.getAmountSpent() + " kr")
                                                             .collect(Collectors.toList());
 
                 // Lager liste med hvilken plass på loser-listen i forkant av Person-objektet
                 listPersonsLosersString = listPersonsLosers.stream()
-                                                            .map(p -> listPersonsLosers.indexOf(p) + 1 + ". " + p.getFirstName() + " " + p.getLastName() + ": " + p.getAmountSpent())
+                                                            .map(p -> listPersonsLosers.indexOf(p) + 1 + ". " + p.getFirstName() + " " + p.getLastName() + ": " + (int) p.getAmountSpent() + " kr")
                                                             .collect(Collectors.toList());
 
                 listPersonsSettings.getItems().setAll(Person.getObjPersons());
