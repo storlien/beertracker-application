@@ -1,2 +1,2 @@
-- name: Submit Dependency Snapshot
+- name: beertracker
   uses: advanced-security/maven-dependency-submission-action@v3
