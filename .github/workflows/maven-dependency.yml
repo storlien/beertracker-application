@@ -1,0 +1,19 @@
+- name: Maven Dependency Tree Dependency Submission
+  # You may pin to the exact commit or the version.
+  # uses: advanced-security/maven-dependency-submission-action@d682d5d68a398c90e9b35f8c564cd8e1918d6a24
+  uses: advanced-security/maven-dependency-submission-action@v3.0.1
+  with:
+    # The directory that contains the maven project
+    directory: # optional, default is ${{ github.workspace }}
+    # Optional path to a Maven settings.xml file for the dependencies to be resolved
+    settings-file: # optional
+    # Flag for optionally ignoring any maven wrapper files (mvnw) and instead rely on the PATH provided mvn
+    ignore-maven-wrapper: # optional
+    # Additional maven arguments to add to the command line invocation of maven when it generates the dependency snapshot
+    maven-args: # optional, default is 
+    # Optionally include the file name in the dependency snapshot report to GitHub. This is required to be true if you want the results in the dependency tree to have a working link.
+    snapshot-include-file-name: # optional, default is true
+    # An optional override to specify the path to the file in the repository that the snapshot should be associated with.
+    snapshot-dependency-file-name: # optional
+    # The GitHub token to use to submit the depedency snapshot to the repository
+    token: # optional, default is ${{ github.token }}
