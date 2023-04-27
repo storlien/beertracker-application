@@ -71,7 +71,7 @@ public class AppController {
             
         };
 
-        timer.schedule(task, 10 * 1000, 5 * 1000); // Delay: 10 sek, Period: 5 sek
+        // timer.schedule(task, 10 * 1000, 5 * 1000); // Delay: 10 sek, Period: 5 sek
 
         updateGUI();
     }
