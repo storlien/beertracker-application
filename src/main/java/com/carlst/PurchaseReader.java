@@ -21,15 +21,19 @@ public class PurchaseReader {
         return getNewerPurchases(jsonString);
     }
 
-
     /**
-     * Henter alle nyere kjøp fra og med det eldste kjøpet på en spørring (JSON string).
+     * Henter alle nyere kjøp fra og med det eldste kjøpet på en spørring (JSON
+     * string).
      * Fortsetter å hente til det ikke finnes flere nye kjøp.
-     * Hvis det ikke var flere nye kjøp fra starten av metodekallet, returneres en tom Multimap.
-     * Synchronized metode for at metoden ikke skal kunne kjøres flere av i parallell.
-     * Det kan bli tull med variabelen PurchaseReader.lastPurchaseHash dersom metoden kjøres flere ganger samtidig.
+     * Hvis det ikke var flere nye kjøp fra starten av metodekallet, returneres en
+     * tom Multimap.
+     * Synchronized metode for at metoden ikke skal kunne kjøres flere av i
+     * parallell.
+     * Det kan bli tull med variabelen PurchaseReader.lastPurchaseHash dersom
+     * metoden kjøres flere ganger samtidig.
      * 
-     * @param jsonString JSON string. Henter alle nye kjøp fra og med den eldste på denne strengen.
+     * @param jsonString JSON string. Henter alle nye kjøp fra og med den eldste på
+     *                   denne strengen.
      * @return Multimap med kortnummer som key og liste med summer som value.
      */
     public static synchronized Multimap<String, Double> getNewerPurchases(String jsonString) {
@@ -57,10 +61,11 @@ public class PurchaseReader {
         return purchases;
     }
 
-
     /**
-     * Returnerer de neste (opp til) 1000 transaksjoner etter (ikke inkludert) lastPurchaseHash.
-     * Dersom det ikke finnes nyere transaksjoner etter lastPurchaseHash, blir "purchases"-listen i JSON-strengen tom.
+     * Returnerer de neste (opp til) 1000 transaksjoner etter (ikke inkludert)
+     * lastPurchaseHash.
+     * Dersom det ikke finnes nyere transaksjoner etter lastPurchaseHash, blir
+     * "purchases"-listen i JSON-strengen tom.
      * 
      * @param lastPurchaseHash Nyere transaksjoner etter denne lastPurchaseHash
      * @return JSON-streng med transaksjoner etter (ikke inkludert) lastPurchaseHash
@@ -69,15 +74,16 @@ public class PurchaseReader {
         return CallAPI.getResponseBody("&lastPurchaseHash=" + lastPurchaseHash);
     }
 
-
     /**
-     * Leser JSON-streng og returnerer Multimap med kortnummer mappet til liste med summer brukt på det kortnummeret i den JSON-strengen.
+     * Leser JSON-streng og returnerer Multimap med kortnummer mappet til liste med
+     * summer brukt på det kortnummeret i den JSON-strengen.
      * 
      * @param jsonString JSON-streng med transaksjoner
-     * @return Multimap med kortnummer mappet til liste med summer brukt på det kortnummeret
+     * @return Multimap med kortnummer mappet til liste med summer brukt på det
+     *         kortnummeret
      */
     public static Multimap<String, Double> getPurchases(String jsonString) {
-    
+
         ObjectMapper objectMapper = new ObjectMapper();
 
         Multimap<String, Double> purchases = ArrayListMultimap.create();
@@ -116,7 +122,6 @@ public class PurchaseReader {
         return purchases;
     }
 
-
     // Setters
 
     /**
@@ -128,7 +133,6 @@ public class PurchaseReader {
         PurchaseReader.lastPurchaseHash = lastPurchaseHash;
     }
 
-
     // Getters
 
     /**
@@ -139,7 +143,6 @@ public class PurchaseReader {
     public static String getLastPurchaseHash() {
         return lastPurchaseHash;
     }
-
 
     /**
      * Returnerer lastPurchaseHash fra en JSON-streng med transaksjoner.

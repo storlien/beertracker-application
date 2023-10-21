@@ -24,7 +24,6 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(fxmlLocation);
         // loader.setLocation(getClass().getResource("ui.fxml"));
 
-
         primaryStage.setScene(new Scene(loader.load()));
 
         controller = loader.getController();
@@ -37,9 +36,9 @@ public class App extends Application {
 
         primaryStage.show();
     }
-    
+
     public static void main(String[] args) {
         Application.launch(args);
     }
-    
+
 }
