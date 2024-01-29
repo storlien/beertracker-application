@@ -1,4 +1,4 @@
-package com.carlst;
+package storlien.beertracker.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +80,7 @@ public class Person implements Comparable<Person> {
 
     /**
      * Validerer om et navn er gyldig. Sjekker også om navnet er registrert fra før.
-     * 
+     *
      * @param firstName
      * @param lastName
      * @return
@@ -96,7 +96,7 @@ public class Person implements Comparable<Person> {
         List<String> fNames = objPersons.stream().map(p -> p.getFirstName()).collect(Collectors.toList());
         List<String> lNames = objPersons.stream().map(p -> p.getLastName()).collect(Collectors.toList());
 
-        for (int i = 0 ; i < fNames.size() ; i++) {
+        for (int i = 0; i < fNames.size(); i++) {
             if (firstName.equals(fNames.get(i)) && lastName.equals(lNames.get(i))) {
                 return false;
             }
@@ -107,7 +107,7 @@ public class Person implements Comparable<Person> {
 
     /**
      * Validerer om kjøpesummen er gyldig.
-     * 
+     *
      * @param amount Kjøpesum
      * @return True dersom kjøpesummen er gyldig, false ellers
      */
@@ -121,15 +121,17 @@ public class Person implements Comparable<Person> {
     }
 
     /**
-     * Validerer om et kort er gyldig. Sjekker også om kortet er lagt inn fra før, uansett person.
-     * 
+     * Validerer om et kort er gyldig. Sjekker også om kortet er lagt inn fra før,
+     * uansett person.
+     *
      * @param cardFirstSix Første seks siffer av kortnummeret
      * @param cardLastFour Siste fire siffer av kortnummeret
      * @return True dersom kortet er gyldig, false ellers
      */
     public boolean validateCard(String cardFirstSix, String cardLastFour) {
 
-        if (!Pattern.compile("\\d{6}").matcher(cardFirstSix).matches() || !Pattern.compile("\\d{4}").matcher(cardLastFour).matches()) {
+        if (!Pattern.compile("\\d{6}").matcher(cardFirstSix).matches()
+                || !Pattern.compile("\\d{4}").matcher(cardLastFour).matches()) {
             return false;
         }
 
@@ -151,7 +153,7 @@ public class Person implements Comparable<Person> {
 
     /**
      * Legger til sum på tidligere sum brukt.
-     * 
+     *
      * @param amount Sum å legge til tidligere sum brukt
      */
     public void addAmount(double amount) {
@@ -164,7 +166,7 @@ public class Person implements Comparable<Person> {
 
     /**
      * Legger til kort.
-     * 
+     *
      * @param cardFirstSix Første seks siffer av kortnummeret
      * @param cardLastFour Siste fire siffer av kortnummeret
      */
@@ -178,12 +180,13 @@ public class Person implements Comparable<Person> {
 
     /**
      * Fjerner kort.
-     * 
+     *
      * @param cardFirstSix Første seks siffer av kortnummeret
      * @param cardLastFour Siste fire siffer av kortnummeret
      */
     public void removeCard(String cardFirstSix, String cardLastFour) {
-        if (!Pattern.compile("\\d{6}").matcher(cardFirstSix).matches() || !Pattern.compile("\\d{4}").matcher(cardLastFour).matches()) {
+        if (!Pattern.compile("\\d{6}").matcher(cardFirstSix).matches()
+                || !Pattern.compile("\\d{4}").matcher(cardLastFour).matches()) {
             throw new IllegalArgumentException("Invalid card number");
         }
 
@@ -199,8 +202,9 @@ public class Person implements Comparable<Person> {
     }
 
     /**
-     * Metoden .sort() vil sortere Person-objektene fra størst til minst pengesum brukt.
-     * 
+     * Metoden .sort() vil sortere Person-objektene fra størst til minst pengesum
+     * brukt.
+     *
      * @param that
      * @return
      */
@@ -224,6 +228,7 @@ public class Person implements Comparable<Person> {
 
         System.out.println(getObjPersons());
 
-        // System.out.println("Valid? " + objPersons.get(0).validateCard("141414", "1414"));
+        // System.out.println("Valid? " + objPersons.get(0).validateCard("141414",
+        // "1414"));
     }
 }

@@ -1,4 +1,4 @@
-package com.carlst;
+package storlien.beertracker.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.BeforeEach;
 
 public class PersonTest {
@@ -23,7 +24,7 @@ public class PersonTest {
     public void tearDown() {
         Person.setObjPersons(new ArrayList<>());
     }
-    
+
     @Test
     public void testConstructor() {
         new Person("Fanto", "Rangen");

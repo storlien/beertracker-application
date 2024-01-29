@@ -1,4 +1,4 @@
-package com.carlst;
+package storlien.beertracker.core;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
@@ -10,7 +10,7 @@ public class CallAPI {
 
     /**
      * Returnerer JSON-strengen fra et API-kall spesifisert med queryURLending
-     * 
+     *
      * @param queryURLending Slutten på URL-en for å spesifisere API-kallet. F.eks.
      *                       &descending=true eller &startDate=2022-08-01
      * @return JSON-streng med transaksjoner
@@ -22,7 +22,7 @@ public class CallAPI {
     /**
      * Kaller på Zettle API-et og returnerer svaret. Henter access token fra
      * TokenGetter.getToken().
-     * 
+     *
      * @param queryURLending Slutten på URL-en for å spesifisere API-kallet. F.eks.
      *                       &descending=true eller &startDate=2022-08-01
      * @return HttpReponse<String> fra API. Må bruke .getBody() for å få

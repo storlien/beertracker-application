@@ -1,4 +1,4 @@
-package com.carlst;
+package storlien.beertracker.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -17,7 +17,7 @@ public class Filehandler {
         List<Person> objPersons = new ArrayList<>();
 
         try {
-            BufferedReader bf = new BufferedReader(new FileReader("src/main/resources/persons.txt"));
+            BufferedReader bf = new BufferedReader(new FileReader("src/main/resources/storlien/beertracker/core/persons.txt"));
 
             // Hver linje representerer ett Person-objekt
             int index = 0;
@@ -25,10 +25,10 @@ public class Filehandler {
             String[] lineList;
             while ((line = bf.readLine()) != null) {
                 lineList = line.split("-");
-                
+
                 // Instansierer Person-objekt
                 objPersons.add(new Person(lineList[0], lineList[1]));
-                
+
                 // Legger til summen
                 double amountSpent = Double.parseDouble(lineList[2]);
                 objPersons.get(index).setAmountSpent(amountSpent);
@@ -62,7 +62,7 @@ public class Filehandler {
      */
     public static void saveFile() {
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/resources/persons.txt"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/resources/storlien/beertracker/core/persons.txt"));
 
             String line;
 
@@ -92,13 +92,14 @@ public class Filehandler {
     }
 
     /**
-     * Leser lastPurchaseHash.txt-filen og oppdaterer PurchaseReader.lastPurchaseHash
+     * Leser lastPurchaseHash.txt-filen og oppdaterer
+     * PurchaseReader.lastPurchaseHash
      */
     public static void readHashFile() {
         String lastPurchaseHash;
 
         try {
-            BufferedReader bw = new BufferedReader(new FileReader("src/main/resources/lastPurchaseHash.txt"));
+            BufferedReader bw = new BufferedReader(new FileReader("src/main/resources/storlien/beertracker/core/lastPurchaseHash.txt"));
             lastPurchaseHash = bw.readLine();
             bw.close();
         }
@@ -111,11 +112,12 @@ public class Filehandler {
     }
 
     /**
-     * Skriver til lastPurchaseHash.txt-filen med hashen fra PurchaseReader.lastPurchaseHash
+     * Skriver til lastPurchaseHash.txt-filen med hashen fra
+     * PurchaseReader.lastPurchaseHash
      */
     public static void saveHashFile() {
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/resources/lastPurchaseHash.txt"));
+            BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/resources/storlien/beertracker/core/lastPurchaseHash.txt"));
             bw.write(PurchaseReader.getLastPurchaseHash());
             bw.close();
         }

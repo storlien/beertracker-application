@@ -1,6 +1,6 @@
-package com.carlst;
+package storlien.beertracker.core;
 
-import com.carlst.javafx.App;
+import storlien.beertracker.core.javafx.App;
 
 public class AppStarter {
     public static void main(String[] args) {

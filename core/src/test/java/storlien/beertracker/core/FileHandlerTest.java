@@ -1,11 +1,11 @@
-package com.carlst;
+package storlien.beertracker.core;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
 public class FileHandlerTest {
-    
+
     @Test
     public void testReadFile() {
         assertEquals(true, Person.getObjPersons().isEmpty());

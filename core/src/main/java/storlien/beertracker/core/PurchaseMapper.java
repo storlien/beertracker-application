@@ -1,4 +1,4 @@
-package com.carlst;
+package storlien.beertracker.core;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,11 +6,12 @@ import java.util.Map;
 import com.google.common.collect.Multimap;
 
 public class PurchaseMapper {
-    
+
     /**
      * Mapper kjøp og legger til summen på tidligere sum til Person-objektet
-     * 
-     * @param purchases Multimap med kortnummer mappet til liste av summer brukt på det kortnummeret
+     *
+     * @param purchases Multimap med kortnummer mappet til liste av summer brukt på
+     *                  det kortnummeret
      */
     public static void mapPurchases(Multimap<String, Double> purchases) {
 
@@ -20,13 +21,14 @@ public class PurchaseMapper {
 
             for (String cardNumberHolder : cardHolders.keySet()) {
 
-                // Legger til summen på kortholders tidligere brukte sum dersom kortnumrene samsvarer
+                // Legger til summen på kortholders tidligere brukte sum dersom kortnumrene
+                // samsvarer
                 if (cardNumberPurchase.equals(cardNumberHolder)) {
 
                     // Summerer alle kjøp gjort med det kortet og legger til summen hos personen
                     double amount = purchases.get(cardNumberPurchase).stream().reduce(0.0, (acc, b) -> acc + b);
                     cardHolders.get(cardNumberHolder).addAmount(amount);
-                    
+
                     break; // Et kort er kun mappet til én person. Hopper til neste kjøp
                 }
             }
@@ -34,8 +36,9 @@ public class PurchaseMapper {
     }
 
     /**
-     * Lager HashMap med kortnummer mappet til Person-objekt. Henter Person-objekter fra Person.objPersons
-     * 
+     * Lager HashMap med kortnummer mappet til Person-objekt. Henter Person-objekter
+     * fra Person.objPersons
+     *
      * @return HashMap med kortnummer mappet til Person-objekt
      */
     private static Map<String, Person> getCardHolders() {

@@ -1,4 +1,4 @@
-package com.carlst.javafx;
+package storlien.beertracker.core.javafx;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -8,11 +8,6 @@ import java.util.TimerTask;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import com.carlst.Filehandler;
-import com.carlst.Person;
-import com.carlst.PurchaseMapper;
-import com.carlst.PurchaseReader;
-import com.carlst.TokenGetter;
 import com.google.common.collect.Multimap;
 
 import javafx.animation.KeyFrame;
@@ -27,6 +22,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
+import storlien.beertracker.core.*;
 
 public class AppController {
 
@@ -36,12 +32,19 @@ public class AppController {
 
     private Paint green = new Color(0, 0.6, 0, 1.0);
     private Paint red = new Color(1.0, 0.2, 0.2, 1.0);
-    
-    @FXML private Pane container1, container2;
-    @FXML private TextField firstName, lastName, cardNewFirst6, cardNewLast4, cardAddFirst6, cardAddLast4, cardRemoveFirst6, cardRemoveLast4, dateUpdate;
-    @FXML private Label labelStatus, statusError, firstFullName, secondFirstName, secondLastName, thirdFirstName, thirdLastName, firstSum, secondSum, thirdSum;
-    @FXML private ListView<Person> listPersonsSettings;
-    @FXML private ListView<String> listLeaderboard, listLosers;
+
+    @FXML
+    private Pane container1, container2;
+    @FXML
+    private TextField firstName, lastName, cardNewFirst6, cardNewLast4, cardAddFirst6, cardAddLast4, cardRemoveFirst6,
+            cardRemoveLast4, dateUpdate;
+    @FXML
+    private Label labelStatus, statusError, firstFullName, secondFirstName, secondLastName, thirdFirstName,
+            thirdLastName, firstSum, secondSum, thirdSum;
+    @FXML
+    private ListView<Person> listPersonsSettings;
+    @FXML
+    private ListView<String> listLeaderboard, listLosers;
 
     @FXML
     public void initialize() {
@@ -49,10 +52,12 @@ public class AppController {
         container1.setVisible(false);
         container2.setVisible(true);
 
-        // Lager instans av TokenGetter som sørger for at access token er gyldig til enhver tid
+        // Lager instans av TokenGetter som sørger for at access token er gyldig til
+        // enhver tid
         tokenGetter = new TokenGetter();
 
-        // Leser filer og lager liste med Person-objekter på Person.objPersons og laster lastPurchaseHash til PurchaseReader.lastPurchaseHash
+        // Leser filer og lager liste med Person-objekter på Person.objPersons og laster
+        // lastPurchaseHash til PurchaseReader.lastPurchaseHash
         Filehandler.readFile();
         Filehandler.readHashFile();
 
@@ -60,7 +65,8 @@ public class AppController {
         task = new TimerTask() {
             @Override
             public void run() {
-                Multimap<String, Double> newPurchases = PurchaseReader.getNewerPurchases(PurchaseReader.getJsonStringLastHash(PurchaseReader.getLastPurchaseHash()));
+                Multimap<String, Double> newPurchases = PurchaseReader
+                        .getNewerPurchases(PurchaseReader.getJsonStringLastHash(PurchaseReader.getLastPurchaseHash()));
 
                 if (!newPurchases.isEmpty()) {
                     PurchaseMapper.mapPurchases(newPurchases);
@@ -68,7 +74,7 @@ public class AppController {
                 }
 
             }
-            
+
         };
 
         // timer.schedule(task, 10 * 1000, 5 * 1000); // Delay: 10 sek, Period: 5 sek
@@ -94,12 +100,12 @@ public class AppController {
 
         mapNewPurchases("2022-08-01");
 
-    }          
+    }
 
     @FXML
     public void onAddCard() {
         Person person = listPersonsSettings.getSelectionModel().getSelectedItem();
-        
+
         if (person == null) {
             updateErrorStatus("Velg en person først");
             return;
@@ -120,7 +126,7 @@ public class AppController {
     @FXML
     public void onRemoveCard() {
         Person person = listPersonsSettings.getSelectionModel().getSelectedItem();
-        
+
         if (person == null) {
             updateErrorStatus("Velg en person først");
             return;
@@ -148,7 +154,7 @@ public class AppController {
         }
 
         Person.getObjPersons().remove(person);
-        
+
         updateStatus("Person fjernet", red, true);
         updateGUI();
     }
@@ -183,7 +189,7 @@ public class AppController {
 
     /**
      * Tilbakestiller summene og mapper kjøpshistorikk på nytt
-     * 
+     *
      * @param date Tidligste dato for kjøp som skal hentes
      */
     public void mapNewPurchases(String date) {
@@ -234,7 +240,8 @@ public class AppController {
 
                 timeline.setCycleCount(1);
                 timeline.play();
-            }});
+            }
+        });
     }
 
     private void updateErrorStatus(String error) {
@@ -252,7 +259,8 @@ public class AppController {
 
                 timeline.setCycleCount(1);
                 timeline.play();
-            }});
+            }
+        });
     }
 
     private void updateGUI() {
@@ -261,8 +269,10 @@ public class AppController {
 
             @Override
             public void run() {
-                List<Person> listPersonsRanked = new ArrayList<>(Person.getObjPersons().stream().sorted().collect(Collectors.toList()));
-                List<Person> listPersonsLosers = new ArrayList<>(Person.getObjPersons().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()));
+                List<Person> listPersonsRanked = new ArrayList<>(
+                        Person.getObjPersons().stream().sorted().collect(Collectors.toList()));
+                List<Person> listPersonsLosers = new ArrayList<>(
+                        Person.getObjPersons().stream().sorted(Comparator.reverseOrder()).collect(Collectors.toList()));
 
                 List<String> listPersonsRankedString;
                 List<String> listPersonsLosersString;
@@ -288,13 +298,15 @@ public class AppController {
 
                 // Lager liste med hvilken plass på leaderboardet i forkant av Person-objektet
                 listPersonsRankedString = listPersonsRanked.stream()
-                                                            .map(p -> listPersonsRanked.indexOf(p) + 4 + ". " + p.getFirstName() + " " + p.getLastName() + ": " + (int) p.getAmountSpent() + " kr")
-                                                            .collect(Collectors.toList());
+                        .map(p -> listPersonsRanked.indexOf(p) + 4 + ". " + p.getFirstName() + " " + p.getLastName()
+                                + ": " + (int) p.getAmountSpent() + " kr")
+                        .collect(Collectors.toList());
 
                 // Lager liste med hvilken plass på loser-listen i forkant av Person-objektet
                 listPersonsLosersString = listPersonsLosers.stream()
-                                                            .map(p -> listPersonsLosers.indexOf(p) + 1 + ". " + p.getFirstName() + " " + p.getLastName() + ": " + (int) p.getAmountSpent() + " kr")
-                                                            .collect(Collectors.toList());
+                        .map(p -> listPersonsLosers.indexOf(p) + 1 + ". " + p.getFirstName() + " " + p.getLastName()
+                                + ": " + (int) p.getAmountSpent() + " kr")
+                        .collect(Collectors.toList());
 
                 listPersonsSettings.getItems().setAll(Person.getObjPersons());
                 listLeaderboard.getItems().setAll(listPersonsRankedString);

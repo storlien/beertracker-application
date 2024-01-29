@@ -1,4 +1,4 @@
-package com.carlst;
+package storlien.beertracker.core;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,7 +11,7 @@ public class PurchaseReader {
 
     /**
      * Henter alle kjøp fra og med en dato og returnerer Multimap
-     * 
+     *
      * @param date Dato i formatet "YYYY-MM-DD".
      * @return Multimap med kortnummer som key og liste med summer som value.
      */
@@ -31,7 +31,7 @@ public class PurchaseReader {
      * parallell.
      * Det kan bli tull med variabelen PurchaseReader.lastPurchaseHash dersom
      * metoden kjøres flere ganger samtidig.
-     * 
+     *
      * @param jsonString JSON string. Henter alle nye kjøp fra og med den eldste på
      *                   denne strengen.
      * @return Multimap med kortnummer som key og liste med summer som value.
@@ -66,7 +66,7 @@ public class PurchaseReader {
      * lastPurchaseHash.
      * Dersom det ikke finnes nyere transaksjoner etter lastPurchaseHash, blir
      * "purchases"-listen i JSON-strengen tom.
-     * 
+     *
      * @param lastPurchaseHash Nyere transaksjoner etter denne lastPurchaseHash
      * @return JSON-streng med transaksjoner etter (ikke inkludert) lastPurchaseHash
      */
@@ -77,7 +77,7 @@ public class PurchaseReader {
     /**
      * Leser JSON-streng og returnerer Multimap med kortnummer mappet til liste med
      * summer brukt på det kortnummeret i den JSON-strengen.
-     * 
+     *
      * @param jsonString JSON-streng med transaksjoner
      * @return Multimap med kortnummer mappet til liste med summer brukt på det
      *         kortnummeret
@@ -126,7 +126,7 @@ public class PurchaseReader {
 
     /**
      * Setter ny lastPurchaseHash
-     * 
+     *
      * @param lastPurchaseHash Ny lastPurchaseHash
      */
     public static void setLastPurchaseHash(String lastPurchaseHash) {
@@ -137,7 +137,7 @@ public class PurchaseReader {
 
     /**
      * Returnerer lastPurchaseHash fra PurchaseReader.lastPurchaseHash
-     * 
+     *
      * @return lastPurchaseHash
      */
     public static String getLastPurchaseHash() {
@@ -146,7 +146,7 @@ public class PurchaseReader {
 
     /**
      * Returnerer lastPurchaseHash fra en JSON-streng med transaksjoner.
-     * 
+     *
      * @param jsonResponse JSON-strengen med transaksjoner
      * @return lastPurchaseHash fra JSON-strengen
      */

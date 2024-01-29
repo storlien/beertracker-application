@@ -1,4 +1,4 @@
-package com.carlst;
+package storlien.beertracker.core;
 
 public class RegEx {
 
@@ -7,7 +7,7 @@ public class RegEx {
 
         if (s.equals("s")) {
             throw new IllegalArgumentException("Method1 melder s");
-        } 
+        }
 
         else {
             System.out.println("All good i metode1");

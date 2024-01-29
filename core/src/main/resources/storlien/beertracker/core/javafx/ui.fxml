@@ -10,13 +10,13 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="646.0" prefWidth="956.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.carlst.javafx.AppController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="646.0" prefWidth="956.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="storlien.beertracker.core.javafx.AppController">
    <children>
       <Pane fx:id="container2" prefHeight="646.0" prefWidth="956.0" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="imagePodium" fitHeight="272.0" fitWidth="702.0" layoutX="127.0" layoutY="136.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../fxml/podium.png" />
+                  <Image url="@podium.png" />
                </image>
             </ImageView>
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="127.0" layoutY="14.0" text="HVEM ER TØRSTEST PÅ LABAMBA?">
