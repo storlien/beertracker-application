@@ -1,4 +1,4 @@
-package storlien.beertracker.core;
+package storlien.beertracker.application.core;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package storlien.beertracker.core;
+package storlien.beertracker.application.core;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;

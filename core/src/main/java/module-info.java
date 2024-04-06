@@ -6,6 +6,7 @@ module beertracker.core {
     requires com.fasterxml.jackson.databind;
     requires unirest.java;
 
-    exports storlien.beertracker.core.javafx to javafx.graphics;
-    opens storlien.beertracker.core.javafx to javafx.fxml;
+    exports storlien.beertracker.application.core.javafx to javafx.graphics;
+
+    opens storlien.beertracker.application.core.javafx to javafx.fxml;
 }

@@ -1,4 +1,4 @@
-package storlien.beertracker.core;
+package storlien.beertracker.application.core;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

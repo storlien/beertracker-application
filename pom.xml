@@ -101,7 +101,7 @@
              <archive>
                  <manifest>
                      <addClasspath>true</addClasspath>
-                     <mainClass>beertracker.core/storlien.beertracker.core.AppStarter</mainClass>
+                     <mainClass>beertracker.core/storlien.beertracker.application.core.AppStarter</mainClass>
                  </manifest>
                  <manifestEntries>
                      <Class-Path>.</Class-Path>
@@ -131,7 +131,7 @@
             <artifactId>javafx-maven-plugin</artifactId>
             <version>0.0.8</version>
             <configuration>
-                <mainClass>beertracker.core/storlien.beertracker.core.javafx.App</mainClass>
+                <mainClass>beertracker.core/storlien.beertracker.application.core.javafx.App</mainClass>
             </configuration>
         </plugin>
         <plugin>
@@ -142,7 +142,7 @@
              <finalName>BeerTracker</finalName>
              <archive>
                  <manifest>
-                     <mainClass>beertracker.core/storlien.beertracker.core.AppStarter</mainClass>
+                     <mainClass>beertracker.core/storlien.beertracker.application.core.AppStarter</mainClass>
                  </manifest>
              </archive>
              <descriptorRefs>

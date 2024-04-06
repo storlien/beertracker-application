@@ -1,4 +1,4 @@
-package storlien.beertracker.core;
+package storlien.beertracker.application.core;
 
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;

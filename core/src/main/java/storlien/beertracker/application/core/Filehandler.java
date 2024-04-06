@@ -1,4 +1,4 @@
-package storlien.beertracker.core;
+package storlien.beertracker.application.core;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -17,7 +17,8 @@ public class Filehandler {
         List<Person> objPersons = new ArrayList<>();
 
         try {
-            BufferedReader bf = new BufferedReader(new FileReader("src/main/resources/storlien/beertracker/core/persons.txt"));
+            BufferedReader bf = new BufferedReader(
+                    new FileReader("src/main/resources/storlien/beertracker/application/core/persons.txt"));
 
             // Hver linje representerer ett Person-objekt
             int index = 0;
@@ -62,7 +63,8 @@ public class Filehandler {
      */
     public static void saveFile() {
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/resources/storlien/beertracker/core/persons.txt"));
+            BufferedWriter bw = new BufferedWriter(
+                    new FileWriter("src/main/resources/storlien/beertracker/application/core/persons.txt"));
 
             String line;
 
@@ -99,7 +101,8 @@ public class Filehandler {
         String lastPurchaseHash;
 
         try {
-            BufferedReader bw = new BufferedReader(new FileReader("src/main/resources/storlien/beertracker/core/lastPurchaseHash.txt"));
+            BufferedReader bw = new BufferedReader(
+                    new FileReader("src/main/resources/storlien/beertracker/application/core/lastPurchaseHash.txt"));
             lastPurchaseHash = bw.readLine();
             bw.close();
         }
@@ -117,7 +120,8 @@ public class Filehandler {
      */
     public static void saveHashFile() {
         try {
-            BufferedWriter bw = new BufferedWriter(new FileWriter("src/main/resources/storlien/beertracker/core/lastPurchaseHash.txt"));
+            BufferedWriter bw = new BufferedWriter(
+                    new FileWriter("src/main/resources/storlien/beertracker/application/core/lastPurchaseHash.txt"));
             bw.write(PurchaseReader.getLastPurchaseHash());
             bw.close();
         }

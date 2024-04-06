@@ -1,4 +1,4 @@
-package storlien.beertracker.core.javafx;
+package storlien.beertracker.application.core.javafx;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -22,7 +22,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.util.Duration;
-import storlien.beertracker.core.*;
+import storlien.beertracker.application.core.*;
 
 public class AppController {
 
