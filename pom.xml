@@ -8,8 +8,14 @@
     <version>1.0</version>
     <packaging>pom</packaging>
 
-    <name>BeerTracker Application</name>
+    <groupId>storlien</groupId>
+    <artifactId>beertracker</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
+    <name>beertracker</name>
+  <!-- FIXME change it to the project's website -->
+  <url>http://www.example.com</url>
     <modules>
         <module>core</module>
     </modules>
